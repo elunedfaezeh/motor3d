@@ -1,0 +1,37 @@
+/* ایمپورت فونت‌ها از گوگل */
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,100..900;1,100..900&display=swap");
+
+/* ایمپورت tailwind */
+@import "tailwindcss";
+
+/* تعریف متغیرهای CSS در root */
+:root {
+  --theme-color: #643243; /* رنگ اصلی تم */
+  --theme-gradient: linear-gradient(
+    0deg,
+    #643243 0%,    /* شروع گرادیانت با رنگ اصلی */
+    #643243CC 15%, /* همون رنگ ولی کمی شفاف‌تر */
+    #000000 40%,   /* مشکی در وسط */
+    #000000 100%   /* مشکی کامل در پایین */
+  );
+
+  /* تعریف فونت‌ها */
+  --font-orbitron: "Orbitron", sans-serif;
+  --font-roboto: "Roboto", sans-serif;
+  --font-saira: "Saira", sans-serif;
+}
+
+/* استایل عمومی برای body */
+body {
+  margin: 0;
+  font-family: var(--font-orbitron); /* فونت پیش‌فرض */
+  background: var(--theme-gradient); /* پس‌زمینه با گرادیانت پویا */
+  color: white;
+}
+
+/* جلوگیری از اسکرول افقی ناخواسته */
+html,
+body {
+  @apply overflow-x-hidden;
+}
