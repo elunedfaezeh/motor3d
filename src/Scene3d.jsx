@@ -10,7 +10,6 @@ export default function Scene3d() {
   const [body, setBody] = useState("#643243");
   const [undercarriage, setUndercarriage] = useState("#000000");
   const [Tiers, setTiers] = useState("#000000");
-const controlsRef = useRef()
   // تغییر تم
   useEffect(() => {
     document.documentElement.style.setProperty("--theme-color", body);
@@ -23,16 +22,7 @@ const controlsRef = useRef()
       #000000 100%
     )`;
     document.documentElement.style.setProperty("--theme-gradient", gradient);
-    gsap.to(controlsRef.current, {
-      y:-200,
-      delay: 2,
-      duration: 6,
-    }
-  
-   ) })
-
-  
-  [body];
+    })[body];
 
 
  

@@ -38,12 +38,12 @@ export default function Model({ body, undercarriage, Tiers }) {
     if (!groupRef.current || !gltf) return;
 
     // شروع مدل پایین
-    groupRef.current.position.y = -10;
+    groupRef.current.position.y = -7;
 
     // حرکت به موقعیت نهایی
     gsap.to(groupRef.current.position, {
       y: -4,       // موقعیت نهایی
-      duration: 7,  // زمان انیمیشن
+      duration: 3,  // زمان انیمیشن
       ease: "power3.out",
     });
   }, [gltf]);
