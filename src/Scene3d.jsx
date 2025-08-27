@@ -1,19 +1,20 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import Model from "./Model";
 import gsap from "gsap";
 
-import { useRef } from "react";
-
 export default function Scene3d() {
   const [body, setBody] = useState("#643243");
   const [undercarriage, setUndercarriage] = useState("#000000");
   const [Tiers, setTiers] = useState("#000000");
+  const [loading, setLoading] = useState(true);
+  const controlsRef = useRef();
+
   // تغییر تم
   useEffect(() => {
     document.documentElement.style.setProperty("--theme-color", body);
-  
+
     const gradient = `linear-gradient(
       0deg,
       ${body} 0%,
@@ -22,13 +23,10 @@ export default function Scene3d() {
       #000000 100%
     )`;
     document.documentElement.style.setProperty("--theme-gradient", gradient);
-  
-  }, [body]); // اینجا dependency array
-  
- 
+  }, [body]);
 
   return (
-    <div className="w-screen  relative text-white flex flex-col items-center px-4 md:px-12">
+    <div className="w-screen h-screen relative text-white flex flex-col items-center px-4 md:px-12">
       {/* متن و دکمه‌ها */}
       <section className="flex flex-col items-center text-center gap-4 mt-2">
         <h1 className="text-3xl md:text-5xl font-Avega py-3 max-w-[600px] leading-tight">
@@ -74,6 +72,24 @@ export default function Scene3d() {
         </div>
       </section>
 
+      {/* Spinner نئونی */}
+      {loading && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+          <div className="relative">
+            <div
+              className="w-14 h-14 border-4 border-t-transparent rounded-full animate-spin"
+              style={{ borderColor: "var(--theme-color)" }}
+            ></div>
+            <div
+              className="absolute inset-0 flex items-center justify-center text-white font-orbitron text-sm"
+              style={{ textShadow: `0 0 8px var(--theme-color)` }}
+            >
+              Loading
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* مدل 3D */}
       <div className="w-full max-w-[700px] h-[400px] md:h-[530px] mt-4">
         <Canvas camera={{ position: [10, 0, 0] }}>
@@ -84,18 +100,33 @@ export default function Scene3d() {
           <directionalLight position={[0, 0, 5]} intensity={3} />
 
           <Suspense fallback={null}>
-            <Model  body={body} undercarriage={undercarriage} Tiers={Tiers} />
+            <Model
+              body={body}
+              undercarriage={undercarriage}
+              Tiers={Tiers}
+              onLoad={() => setLoading(false)}
+            />
           </Suspense>
 
-          <OrbitControls />
+          {/* غیر فعال کردن Zoom و Pan */}
+          <OrbitControls enableZoom={false} enablePan={false} />
         </Canvas>
       </div>
 
       {/* کنترل رنگ‌ها */}
-      <section  className="absolute left-3 md:left-16 bottom-10 md:bottom-28
-        flex flex-col gap-2 border border-white/20 py-2 px-3 md:py-4 md:px-5 
-        rounded-xl font-orbitron text-[10px] md:text-xs bg-white/10 
-        backdrop-blur-md shadow-lg w-32 md:w-44">
+      <section
+  ref={controlsRef}
+  className="
+    absolute left-3 md:left-16
+    bottom-auto md:bottom-28   /* دسکتاپ پایین */
+    top-auto                     /* موبایل خودش زیر مدل قرار می‌گیره */
+    mt-[410px] md:mt-0           /* فاصله از مدل روی موبایل */
+    flex flex-col gap-2 border border-white/20 py-2 px-3 md:py-4 md:px-5
+    rounded-xl font-orbitron text-[10px] md:text-xs bg-white/10 
+    backdrop-blur-md shadow-lg w-32 md:w-44
+  "
+>
+
 
         <label className="flex items-center justify-between gap-2">
           <span className="whitespace-nowrap">Body</span>
@@ -103,8 +134,7 @@ export default function Scene3d() {
             type="color"
             value={body}
             onChange={(e) => setBody(e.target.value)}
-            className="w-5 h-5 md:w-7 md:h-7 shadow-inner cursor-pointer 
-            appearance-none overflow-hidden rounded-md"
+            className="w-5 h-5 md:w-7 md:h-7 shadow-inner cursor-pointer appearance-none overflow-hidden rounded-md"
           />
         </label>
 
@@ -114,8 +144,7 @@ export default function Scene3d() {
             type="color"
             value={undercarriage}
             onChange={(e) => setUndercarriage(e.target.value)}
-            className="w-5 h-5 md:w-7 md:h-7 shadow-inner cursor-pointer 
-            appearance-none overflow-hidden rounded-md"
+            className="w-5 h-5 md:w-7 md:h-7 shadow-inner cursor-pointer appearance-none overflow-hidden rounded-md"
           />
         </label>
 
@@ -125,12 +154,10 @@ export default function Scene3d() {
             type="color"
             value={Tiers}
             onChange={(e) => setTiers(e.target.value)}
-            className="w-5 h-5 md:w-7 md:h-7 shadow-inner cursor-pointer 
-            appearance-none overflow-hidden rounded-md"
+            className="w-5 h-5 md:w-7 md:h-7 shadow-inner cursor-pointer appearance-none overflow-hidden rounded-md"
           />
         </label>
       </section>
-
     </div>
   );
 }
