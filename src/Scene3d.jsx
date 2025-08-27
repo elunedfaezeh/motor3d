@@ -13,7 +13,7 @@ export default function Scene3d() {
   // تغییر تم
   useEffect(() => {
     document.documentElement.style.setProperty("--theme-color", body);
-
+  
     const gradient = `linear-gradient(
       0deg,
       ${body} 0%,
@@ -22,9 +22,9 @@ export default function Scene3d() {
       #000000 100%
     )`;
     document.documentElement.style.setProperty("--theme-gradient", gradient);
-    })[body];
-
-
+  
+  }, [body]); // اینجا dependency array
+  
  
 
   return (
@@ -92,7 +92,7 @@ export default function Scene3d() {
       </div>
 
       {/* کنترل رنگ‌ها */}
-      <section ref={controlsRef} className="absolute left-3 md:left-16 bottom-10 md:bottom-28
+      <section  className="absolute left-3 md:left-16 bottom-10 md:bottom-28
         flex flex-col gap-2 border border-white/20 py-2 px-3 md:py-4 md:px-5 
         rounded-xl font-orbitron text-[10px] md:text-xs bg-white/10 
         backdrop-blur-md shadow-lg w-32 md:w-44">
