@@ -11,8 +11,6 @@ export default function Scene3d() {
   const [undercarriage, setUndercarriage] = useState("#000000");
   const [Tiers, setTiers] = useState("#000000");
 const controlsRef = useRef()
-const hRef = useRef()
-
   // تغییر تم
   useEffect(() => {
     document.documentElement.style.setProperty("--theme-color", body);
@@ -29,31 +27,21 @@ const hRef = useRef()
       y:-200,
       delay: 2,
       duration: 6,
-    })
-  ,
-  gsap.fromTo(hRef.current, 
-    {
-      opacity: 0
-    },
-    {
-      opacity: 1,
-      delay: 1,
-      color: 0xffffff,
-      duration: 4,
-      repeat: 0,
-      // yoyo: true,
-    },
+    }
   
-   ),[body] });
+   ) })
+
+  
+  [body];
 
 
  
 
   return (
-    <div ref={hRef} className="w-screen  relative text-white flex flex-col items-center px-4 md:px-12">
+    <div className="w-screen  relative text-white flex flex-col items-center px-4 md:px-12">
       {/* متن و دکمه‌ها */}
       <section className="flex flex-col items-center text-center gap-4 mt-2">
-        <h1  className="text-3xl md:text-5xl font-Avega py-3 max-w-[600px] leading-tight">
+        <h1 className="text-3xl md:text-5xl font-Avega py-3 max-w-[600px] leading-tight">
           THIS IS WHAT{" "}
           <span
             className="bg-clip-text text-transparent drop-shadow-[0_0_10px_var(--theme-color)]"
