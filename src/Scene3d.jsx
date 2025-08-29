@@ -46,8 +46,7 @@ export default function Scene3d() {
         </h1>
 
         <p className="text-xs md:text-sm text-white-200 font-orbitron max-w-[450px] leading-snug my-2">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Maur possimus
-          voluptatum iusto.
+        Let’s build out your dream bike together
         </p>
 
         <div className="flex gap-4 mt-1">
