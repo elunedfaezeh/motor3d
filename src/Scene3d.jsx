@@ -1,15 +1,15 @@
 import React, { Suspense, useEffect, useState, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, useProgress } from "@react-three/drei";
 import Model from "./Model";
-import gsap from "gsap";
+import Loader from "./Loader";
 
 export default function Scene3d() {
   const [body, setBody] = useState("#643243");
   const [undercarriage, setUndercarriage] = useState("#000000");
   const [Tiers, setTiers] = useState("#000000");
-  const [loading, setLoading] = useState(true);
   const controlsRef = useRef();
+  const { progress } = useProgress(); // درصد لود
 
   // تغییر تم
   useEffect(() => {
@@ -27,6 +27,9 @@ export default function Scene3d() {
 
   return (
     <div className="w-screen h-screen relative text-white flex flex-col items-center px-4 md:px-12">
+      {/* Loader */}
+      {progress < 100 && <Loader />}
+
       {/* متن و دکمه‌ها */}
       <section className="flex flex-col items-center text-center gap-4 mt-2">
         <h1 className="text-3xl md:text-5xl font-Avega py-3 max-w-[600px] leading-tight">
@@ -46,7 +49,7 @@ export default function Scene3d() {
         </h1>
 
         <p className="text-xs md:text-sm text-white-200 font-orbitron max-w-[450px] leading-snug my-2">
-        Let’s build out your dream bike together
+          Let’s build out your dream bike together
         </p>
 
         <div className="flex gap-4 mt-1">
@@ -71,24 +74,6 @@ export default function Scene3d() {
         </div>
       </section>
 
-      {/* Spinner نئونی */}
-      {loading && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-          <div className="relative">
-            <div
-              className="w-14 h-14 border-4 border-t-transparent rounded-full animate-spin"
-              style={{ borderColor: "var(--theme-color)" }}
-            ></div>
-            <div
-              className="absolute inset-0 flex items-center justify-center text-white font-orbitron text-sm"
-              style={{ textShadow: `0 0 8px var(--theme-color)` }}
-            >
-              Loading
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* مدل 3D */}
       <div className="w-full max-w-[700px] h-[400px] md:h-[530px] mt-4">
         <Canvas camera={{ position: [10, 0, 0] }}>
@@ -99,23 +84,16 @@ export default function Scene3d() {
           <directionalLight position={[0, 0, 5]} intensity={3} />
 
           <Suspense fallback={null}>
-            <Model
-              body={body}
-              undercarriage={undercarriage}
-              Tiers={Tiers}
-              onLoad={() => setLoading(false)}
-            />
+            <Model body={body} undercarriage={undercarriage} Tiers={Tiers} />
           </Suspense>
 
-          {/* غیر فعال کردن Zoom و Pan */}
           <OrbitControls enableZoom={false} enablePan={false} />
         </Canvas>
       </div>
-
       {/* کنترل رنگ‌ها */}
       <section
-  ref={controlsRef}
-  className="
+        ref={controlsRef}
+        className="
     absolute left-3 md:left-16
     bottom-auto md:bottom-28   /* دسکتاپ پایین */
     top-auto                     /* موبایل خودش زیر مدل قرار می‌گیره */
@@ -124,7 +102,7 @@ export default function Scene3d() {
     rounded-xl font-orbitron text-[10px] md:text-xs bg-white/10 
     backdrop-blur-md shadow-lg w-32 md:w-44
   "
->
+      >
 
 
         <label className="flex items-center justify-between gap-2">
