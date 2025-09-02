@@ -1,4 +1,3 @@
-// Scene3d.js
 import React, { Suspense, useEffect, useState, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useProgress } from "@react-three/drei";
@@ -9,9 +8,18 @@ export default function Scene3d() {
   const [body, setBody] = useState("#643243");
   const [undercarriage, setUndercarriage] = useState("#000000");
   const [Tiers, setTiers] = useState("#000000");
-  const controlsRef = useRef();
+  const [modelLoaded, setModelLoaded] = useState(false); // فقط یک بار
   const { progress } = useProgress();
+  const controlsRef = useRef();
 
+  // وقتی progress به 100 رسید → مدل لود شده
+  useEffect(() => {
+    if (progress === 100) {
+      setTimeout(() => setModelLoaded(true), 500); // یه تأخیر برای انیمیشن خروج
+    }
+  }, [progress]);
+
+  // تغییر تم
   useEffect(() => {
     document.documentElement.style.setProperty("--theme-color", body);
     const gradient = `linear-gradient(
@@ -26,8 +34,8 @@ export default function Scene3d() {
 
   return (
     <div className="w-screen h-screen relative text-white flex flex-col items-center px-4 md:px-12">
-      {/* Loader */}
-      {progress < 100 && <Loader />}
+      {/* Loader فقط بار اول */}
+      {!modelLoaded && <Loader progress={progress} />}
 
       {/* متن و دکمه‌ها */}
       <section className="flex flex-col items-center text-center gap-4 mt-2">
@@ -50,30 +58,29 @@ export default function Scene3d() {
         <p className="text-xs md:text-sm text-white-200 font-orbitron max-w-[450px] leading-snug my-2">
           Let’s build out your dream bike together
         </p>
-
         <div className="flex gap-4 mt-1">
-          <button
-            className="px-5 py-1.5 rounded-md border font-medium transition text-sm"
-            style={{
-              borderColor: "var(--theme-color)",
-              color: "var(--theme-color)",
-              boxShadow: "0 0 10px var(--theme-color)",
-            }}
-          >
-            See All
-          </button>
-          <button
-            className="px-5 py-1.5 rounded-md font-medium transition text-sm"
-            style={{
-              color: "var(--theme-color)",
-            }}
-          >
-            About Us
-          </button>
-        </div>
+  <button
+    className="px-5 py-1.5 rounded-md border font-medium transition text-sm"
+    style={{
+      borderColor: "var(--theme-color)",
+      color: "var(--theme-color)",
+      boxShadow: "0 0 10px var(--theme-color)",
+    }}
+  >
+    See All
+  </button>
+  <button
+    className="px-5 py-1.5 rounded-md font-medium transition text-sm"
+    style={{
+      color: "var(--theme-color)",
+    }}
+  >
+    About Us
+  </button>
+</div>
       </section>
 
-      {/* مدل 3D */}
+      {/* مدل سه‌بعدی */}
       <div className="w-full max-w-[700px] h-[400px] md:h-[530px] mt-4">
         <Canvas camera={{ position: [10, 0, 0] }}>
           <ambientLight intensity={2} />
@@ -82,8 +89,10 @@ export default function Scene3d() {
           <directionalLight position={[30, 5, 5]} intensity={4.5} />
           <directionalLight position={[0, 0, 5]} intensity={3} />
 
+          {/* دقت کن: Suspense fallback نداره → دیگه هر بار رنگ عوض شه Loader نشون داده نمیشه */}
           <Suspense fallback={null}>
             <Model body={body} undercarriage={undercarriage} Tiers={Tiers} />
+            
           </Suspense>
 
           <OrbitControls enableZoom={false} enablePan={false} />
@@ -93,35 +102,43 @@ export default function Scene3d() {
       {/* کنترل رنگ‌ها */}
       <section
         ref={controlsRef}
-        className="absolute left-3 md:left-16 bottom-auto md:bottom-28 top-auto mt-[410px] md:mt-0 flex flex-col gap-2 border border-white/20 py-2 px-3 md:py-4 md:px-5 rounded-xl font-orbitron text-[10px] md:text-xs bg-white/10 backdrop-blur-md shadow-lg w-32 md:w-44"
+        className="
+          absolute left-3 md:left-16
+          bottom-auto md:bottom-28
+          top-auto
+          mt-[410px] md:mt-0
+          flex flex-col gap-2 border border-white/20 py-2 px-3 md:py-4 md:px-5
+          rounded-xl font-orbitron text-[10px] md:text-xs bg-white/10 
+          backdrop-blur-md shadow-lg w-32 md:w-44
+        "
       >
         <label className="flex items-center justify-between gap-2">
-          <span className="whitespace-nowrap">Body</span>
+          <span>Body</span>
           <input
             type="color"
             value={body}
             onChange={(e) => setBody(e.target.value)}
-            className="w-5 h-5 md:w-7 md:h-7 shadow-inner cursor-pointer appearance-none overflow-hidden rounded-md"
+            className="w-5 h-5 md:w-7 md:h-7 cursor-pointer rounded-md"
           />
         </label>
 
         <label className="flex items-center justify-between gap-2">
-          <span className="whitespace-nowrap">Bottom</span>
+          <span>Bottom</span>
           <input
             type="color"
             value={undercarriage}
             onChange={(e) => setUndercarriage(e.target.value)}
-            className="w-5 h-5 md:w-7 md:h-7 shadow-inner cursor-pointer appearance-none overflow-hidden rounded-md"
+            className="w-5 h-5 md:w-7 md:h-7 cursor-pointer rounded-md"
           />
         </label>
 
         <label className="flex items-center justify-between gap-2">
-          <span className="whitespace-nowrap">Tiers</span>
+          <span>Tires</span>
           <input
             type="color"
             value={Tiers}
             onChange={(e) => setTiers(e.target.value)}
-            className="w-5 h-5 md:w-7 md:h-7 shadow-inner cursor-pointer appearance-none overflow-hidden rounded-md"
+            className="w-5 h-5 md:w-7 md:h-7 cursor-pointer rounded-md"
           />
         </label>
       </section>

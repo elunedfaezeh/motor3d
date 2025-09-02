@@ -1,14 +1,13 @@
 import { useRef, useEffect } from "react";
-import { useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { useFrame, useLoader } from "@react-three/fiber";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import gsap from "gsap";
 
-export default function Model({ body, undercarriage, Tiers, onLoad }) {
+export default function Model({ body, undercarriage, Tiers }) {
   const groupRef = useRef();
+  const gltf = useLoader(GLTFLoader, "./models/motor.glb");
 
-  // استفاده از useGLTF به جای useLoader
-  const gltf = useGLTF("./models/motor.glb");
-
+  // 🎨 تغییر رنگ (فقط رنگ آپدیت بشه)
   useEffect(() => {
     if (!gltf) return;
 
@@ -21,22 +20,23 @@ export default function Model({ body, undercarriage, Tiers, onLoad }) {
     gltf.scene.traverse((child) => {
       if (child.isMesh && colorMap[child.name]) {
         child.material.color.set(colorMap[child.name]);
-        child.material.needsUpdate = true;
       }
     });
+  }, [body, undercarriage, Tiers, gltf]);
 
+  // 🚀 انیمیشن ورود (فقط یک بار)
+  useEffect(() => {
     if (groupRef.current) {
-      groupRef.current.position.y = -7;
+      groupRef.current.position.y = -7; // شروع پایین
       gsap.to(groupRef.current.position, {
-        y: -4,
+        y: -4, // موقعیت نهایی
         duration: 1.5,
         ease: "power3.out",
       });
     }
+  }, [gltf]); // 👈 فقط وقتی مدل لود شد اجرا بشه
 
-    if (onLoad) onLoad();
-  }, [gltf, body, undercarriage, Tiers, onLoad]);
-
+  // 🔄 چرخش مدل
   useFrame((_, delta) => {
     if (groupRef.current) {
       groupRef.current.rotation.y -= 0.07 * delta;
