@@ -8,12 +8,23 @@ export default function Loader({ progress }) {
   const logoRef = useRef()
 
   useEffect(() => {
-  gsap.fromTo(
-    logoRef.current,
-    { opacity: 0 },
-    { opacity: 1, delay: 1, duration: 2, repeat: -1, yoyo: true }
-  )
-}, [])
+    gsap.fromTo(
+      logoRef.current,
+      {
+        opacity: 1,
+        textShadow: "0px 0px 0px rgba(100,50,67,0)" // شروع بدون سایه
+      },
+      {
+        opacity: 0,
+        textShadow: "0px 0px 20px rgba(100,50,67,1)", // سایه کامل
+        delay: 1,
+        duration: 2,
+        repeat: -1,
+        yoyo: true
+      }
+    )
+  }, [])
+  
 
   return (
     <div
