@@ -1,3 +1,4 @@
+// Scene3d.js
 import React, { Suspense, useEffect, useState, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useProgress } from "@react-three/drei";
@@ -9,12 +10,10 @@ export default function Scene3d() {
   const [undercarriage, setUndercarriage] = useState("#000000");
   const [Tiers, setTiers] = useState("#000000");
   const controlsRef = useRef();
-  const { progress } = useProgress(); // درصد لود
+  const { progress } = useProgress();
 
-  // تغییر تم
   useEffect(() => {
     document.documentElement.style.setProperty("--theme-color", body);
-
     const gradient = `linear-gradient(
       0deg,
       ${body} 0%,
@@ -90,21 +89,12 @@ export default function Scene3d() {
           <OrbitControls enableZoom={false} enablePan={false} />
         </Canvas>
       </div>
+
       {/* کنترل رنگ‌ها */}
       <section
         ref={controlsRef}
-        className="
-    absolute left-3 md:left-16
-    bottom-auto md:bottom-28   /* دسکتاپ پایین */
-    top-auto                     /* موبایل خودش زیر مدل قرار می‌گیره */
-    mt-[410px] md:mt-0           /* فاصله از مدل روی موبایل */
-    flex flex-col gap-2 border border-white/20 py-2 px-3 md:py-4 md:px-5
-    rounded-xl font-orbitron text-[10px] md:text-xs bg-white/10 
-    backdrop-blur-md shadow-lg w-32 md:w-44
-  "
+        className="absolute left-3 md:left-16 bottom-auto md:bottom-28 top-auto mt-[410px] md:mt-0 flex flex-col gap-2 border border-white/20 py-2 px-3 md:py-4 md:px-5 rounded-xl font-orbitron text-[10px] md:text-xs bg-white/10 backdrop-blur-md shadow-lg w-32 md:w-44"
       >
-
-
         <label className="flex items-center justify-between gap-2">
           <span className="whitespace-nowrap">Body</span>
           <input
