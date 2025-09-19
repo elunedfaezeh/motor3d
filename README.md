@@ -1,8 +1,8 @@
-![motor3d Screenshot](./public/images/motor.png)
 
 
 # 🚀 3D Motorcycle Configurator
-
+![motor3d Screenshot](./public/images/motor.png)
+---
 An interactive **3D motorcycle showcase** built with **React, Three.js, GSAP, and Tailwind CSS**.  
 Users can explore the model, rotate it, and **customize colors** for different parts of the bike.  
 The UI theme dynamically changes based on the selected motorcycle color, creating a smooth and modern experience.  
