@@ -9,7 +9,7 @@ The UI theme dynamically changes based on the selected motorcycle color, creatin
 
 
 ## 🎥 Demo
-🔗 Live: [[motor3d.netlify.app](https://motor3d.netlify.app](https://motor-react3d.vercel.app))  
+🔗 Live: [https://motor-react3d.vercel.app)  
 
 
 ## ✨ Features
